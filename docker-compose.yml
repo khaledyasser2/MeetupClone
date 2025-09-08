@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: ../dockerfiles/php.Dockerfile
+    container_name: meetup_app
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - db
+
+  web:
+    image: nginx:stable
+    container_name: meetup_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8
+    container_name: meetup_db
+    environment:
+      MYSQL_DATABASE: meetup
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Tokyo
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  node:
+    image: node:20
+    container_name: meetup_node
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    # no ports; used only
+
+volumes:
+  dbdata:
+    driver: local
