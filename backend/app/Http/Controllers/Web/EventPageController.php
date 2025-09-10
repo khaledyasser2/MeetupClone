@@ -12,9 +12,9 @@ class EventPageController extends Controller
     public function index(Request $request)
     {
         $q  = $request->query('q');
-        $yr = $request->integer('year');
-        $mo = $request->integer('month');
-        $dy = $request->integer('day');
+        $yr = $request->query('year');
+        $mo = $request->query('month');
+        $dy = $request->query('day');
 
         $events = Event::query()
             ->with(['group:id,name', 'creator:id,name'])
@@ -24,9 +24,9 @@ class EventPageController extends Controller
                       ->orWhere('description', 'like', "%{$q}%");
                 });
             })
-            ->when($yr, fn($x) => $x->whereYear('start_at', $yr))
-            ->when($mo, fn($x) => $x->whereMonth('start_at', $mo))
-            ->when($dy, fn($x) => $x->whereDay('start_at', $dy))
+            ->when($yr, fn($x) => $x->whereYear('start_at', (int) $yr))
+            ->when($mo, fn($x) => $x->whereMonth('start_at', (int) $mo))
+            ->when($dy, fn($x) => $x->whereDay('start_at', (int) $dy))
             ->orderBy('start_at')
             ->paginate(12)
             ->withQueryString();
