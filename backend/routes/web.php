@@ -16,9 +16,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+/*Route::get('/dashboard', function () {*/
+/*    return Inertia::render('Dashboard');*/
+/*})->middleware(['auth', 'verified'])->name('dashboard');*/
+Route::get('/dashboard', fn () => redirect()->route('events.index'))
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
