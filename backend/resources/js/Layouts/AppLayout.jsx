@@ -31,6 +31,7 @@ export default function AppLayout({ children }) {
 
           <div className="hidden md:flex items-center gap-1">
             <NavLink href={route("events.index") ?? "/events"}>Events</NavLink>
+            <NavLink href={route("groups.index") ?? "/groups"}>Groups</NavLink>
             {auth?.user ? (
               <>
                 <NavLink href={route("profile.edit") ?? "/profile"}>Profile</NavLink>
