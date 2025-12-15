@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # first-time-start
-# Mac/Windows (Git Bash) agnostic bootstrap for this repo.
-# Assumptions (matches your repo):
-# - docker-compose.yml is in repo root
-# - Laravel app lives in ./backend
-# - PHP service name: "app"
-# - Node service name: "node"
-# - "app" container workdir is /var/www/html (mounted to ./backend)
-# - Vite build outputs to public/build/manifest.json
+# Steps:
+# - docker compose up -d --build
+# - composer install
+# - ensure .env + key:generate
+# - clear caches
+# - migrate
+# - npm install + build via one-off node container
+# - seed (best-effort)
 
 set -euo pipefail
 
@@ -84,4 +84,4 @@ say "Seeding database (DatabaseSeeder)"
 docker compose exec "$APP_SERVICE" php artisan db:seed --force || true
 
 say "Done."
-say "Open: http://localhost"
+say "Open: http://localhost:8080"
